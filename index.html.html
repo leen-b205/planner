@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منظم الخطة الدراسية الأسبوعية</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#eef2f6;--card:#fff;--ink:#18223f;--mute:#5d6882;--line:#d9e0ea;--brand:#243b8f;--brand-ink:#fff;--ok:#1f8a63;--today:#fff7d6;--today-line:#e0b820;--hi:#f6c6c6;--md:#fbe3b4;--lo:#cfe9d6;--hi-t:#8a1f1f;--md-t:#7a5200;--lo-t:#1d5c33;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1426;--card:#182041;--ink:#e8ecf8;--mute:#9aa6c6;--line:#2b3562;--brand:#7f9bff;--brand-ink:#0f1426;--ok:#4cc79a;--today:#2c2a14;--today-line:#d6b53a;--hi:#5a2a35;--md:#5a4721;--lo:#244a37;--hi-t:#ffd0d0;--md-t:#ffe3a8;--lo-t:#c6f1d6;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1426;--card:#182041;--ink:#e8ecf8;--mute:#9aa6c6;--line:#2b3562;--brand:#7f9bff;--brand-ink:#0f1426;--ok:#4cc79a;--today:#2c2a14;--today-line:#d6b53a;--hi:#5a2a35;--md:#5a4721;--lo:#244a37;--hi-t:#ffd0d0;--md-t:#ffe3a8;--lo-t:#c6f1d6;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 60px}
+header h1{margin:0;font-size:1.7rem;font-weight:700}
+header p{margin:2px 0 18px;color:var(--mute)}
+section.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+h2{font-size:1.1rem;margin:0 0 12px}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+label{display:block;font-weight:500;margin-bottom:4px;font-size:.92rem}
+input[type=text],input[type=number],input[type=time],select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible,.chip input:focus-visible+span{outline:3px solid var(--brand);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.row>.f{flex:1;min-width:120px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 14px;font-weight:500}
+button.primary{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:600}
+button.big{padding:13px 22px;font-size:1.05rem}
+button:hover{filter:brightness(.96)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;min-height:34px}
+.tag{display:inline-flex;align-items:center;gap:8px;padding:5px 6px 5px 12px;border-radius:999px;color:#1b2340;font-weight:500;font-size:.88rem}
+.tag small{opacity:.8}
+.tag button{padding:0 7px;border:0;background:rgba(255,255,255,.55);border-radius:50%;line-height:22px;height:22px;color:#1b2340}
+.empty{color:var(--mute);font-size:.9rem}
+.days{display:flex;flex-wrap:wrap;gap:8px}
+.chip input{position:absolute;opacity:0}
+.chip span{display:inline-block;padding:7px 14px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:var(--bg)}
+.chip input:checked+span{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.range{display:flex;align-items:center;gap:12px}
+.range input{flex:1;accent-color:var(--brand)}
+.range output{min-width:90px;font-weight:700;color:var(--brand)}
+.switch{display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:12px}
+.switch input{width:44px;height:24px;accent-color:var(--brand)}
+.note{font-size:.84rem;color:var(--mute);margin:6px 0 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{padding:10px 16px;border-radius:12px;background:var(--lo);color:var(--lo-t);font-weight:500;margin-top:18px}
+.pill.warn{background:var(--md);color:var(--md-t)}
+.pill b{font-weight:700}
+.progress{height:14px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s}
+.ptxt{display:flex;justify-content:space-between;margin-bottom:6px;font-weight:600}
+.week{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.day.today{background:var(--today);border:2px solid var(--today-line)}
+.day h3{margin:0;font-size:1rem;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.day h3 small{color:var(--mute);font-weight:400;font-size:.78rem}
+.badge-today{background:var(--today-line);color:#2a2200;font-size:.75rem;padding:1px 9px;border-radius:99px;font-weight:700}
+.day.off{opacity:.55}
+.sess{border-radius:10px;padding:9px 10px;display:flex;gap:9px;align-items:flex-start;color:#1b2340}
+.sess input{width:19px;height:19px;margin-top:3px;accent-color:#1f6a4d;flex:none}
+.sess .nm{font-weight:600}
+.sess .ch{font-weight:700;font-size:.95rem}
+.sess .meta{display:flex;gap:6px;align-items:center;font-size:.82rem;flex-wrap:wrap}
+.sess.done .nm,.sess.done .ch{text-decoration:line-through;opacity:.6}
+.sess.done{opacity:.7}
+.pr{padding:0 8px;border-radius:99px;font-size:.74rem;font-weight:600}
+.pr.hi{background:var(--hi);color:var(--hi-t)}.pr.md{background:var(--md);color:var(--md-t)}.pr.lo{background:var(--lo);color:var(--lo-t)}
+.backlog{margin-top:16px;padding:12px;border:1px dashed var(--today-line);border-radius:12px}
+.backlog h3{margin:0 0 6px;font-size:1rem}
+.backlog ul{margin:0;padding-inline-start:20px}
+.toasts{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));inset-inline:12px;z-index:50;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{pointer-events:auto;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:10px;max-width:460px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.toast b{display:block}
+@media print{body{background:#fff;color:#000}.noprint,.toasts{display:none!important}.wrap{padding:0}.week{grid-template-columns:repeat(3,1fr)}.day,.sess{break-inside:avoid;border:1px solid #999}.day.today{background:#fff;border:1px solid #999}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="wrap">
+<header>
+  <h1>منظم الخطة الدراسية الأسبوعية</h1>
+  <p>أضف موادك بعدد السكشنات، وسيوزّعها المنظم بالترتيب على أسبوعك ويذكّرك بما لم تنجزه.</p>
+</header>
+
+<section class="panel noprint" aria-labelledby="h-set">
+  <h2 id="h-set">إعدادات الخطة</h2>
+  <div class="grid2">
+    <div>
+      <div class="row">
+        <div class="f" style="flex:2;min-width:160px"><label for="sName">اسم المادة</label><input type="text" id="sName" placeholder="مثال: الرياضيات المتقطعة" maxlength="40"></div>
+        <div class="f"><label for="sCount">عدد السكشنات المطلوبة لهذا الأسبوع</label><input type="number" id="sCount" min="1" max="15" value="5"></div>
+        <div class="f"><label for="sStart">رقم أول سكشن</label><input type="number" id="sStart" min="1" max="99" value="1"></div>
+        <div class="f"><label for="sDiff">مستوى الصعوبة</label>
+          <select id="sDiff"><option value="lo">سهل (ساعة)</option><option value="md" selected>متوسط (ساعة ونصف)</option><option value="hi">صعب (ساعتان)</option></select></div>
+        <button class="primary" id="addSub" type="button">إضافة مادة</button>
+      </div>
+      <p class="note" id="subPreview"></p>
+      <div class="tags" id="tags"></div>
+    </div>
+    <div>
+      <label for="hours">عدد ساعات المذاكرة اليومية</label>
+      <div class="range"><input type="range" id="hours" min="1" max="10" step="0.5" value="4"><output id="hoursOut"></output></div>
+      <label for="maxSubj" style="margin-top:14px">أقصى عدد للمواد في اليوم الواحد</label>
+      <select id="maxSubj"><option value="1">مادة واحدة</option><option value="2">مادتان</option><option value="3">ثلاث مواد</option><option value="4">أربع مواد</option></select>
+      <label style="margin-top:14px">أيام المذاكرة</label>
+      <div class="days" id="days"></div>
+    </div>
+  </div>
+  <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+  <h2>إعدادات التذكير والإشعارات</h2>
+  <div class="row">
+    <div class="f">
+      <label class="switch"><input type="checkbox" id="notifOn" role="switch"><span>تفعيل تذكير المهام غير المنجزة</span></label>
+      <p class="note" id="permNote"></p>
+    </div>
+    <div class="f"><label for="rTime">وقت التذكير اليومي</label><input type="time" id="rTime" value="21:00"></div>
+    <button type="button" id="testN">اختبار الإشعار</button>
+  </div>
+  <div class="pill" id="workload" aria-live="polite"></div>
+  <div class="actions" style="margin-top:14px"><button class="primary big" id="gen" type="button">إنشاء الخطة الأسبوعية</button></div>
+</section>
+
+<section class="panel" aria-labelledby="h-week">
+  <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h2 id="h-week" style="margin:0">الجدول الأسبوعي</h2>
+    <div class="actions noprint">
+      <button type="button" id="resched">ترحيل المهام غير المنجزة لباقي الأسبوع</button>
+      <button type="button" id="shuffle">إعادة توزيع الخطة</button>
+      <button type="button" id="print">طباعة / حفظ PDF</button>
+      <button type="button" id="reset">مسح الخطة</button>
+    </div>
+  </div>
+  <div class="ptxt"><span>التقدم الأسبوعي</span><span id="pTxt"></span></div>
+  <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pBar"><i id="pFill"></i></div>
+  <div class="week" id="week" style="margin-top:16px"></div>
+  <div id="backlog"></div>
+</section>
+</div>
+
+<script>
+const DAYS=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const DIFF={lo:{t:'سهل',h:1},md:{t:'متوسط',h:1.5},hi:{t:'صعب',h:2}};
+const COLORS=['#cfe0ff','#ffd9e4','#d3f2dc','#ffe9bd','#e3d6fb','#c9f0f0','#ffd8c2','#e6efb9'];
+const KEY='arStudyPlanner.v2';
+const $=id=>document.getElementById(id);
+const n=x=>x.toLocaleString('ar-SA');
+const fmtH=h=>h===1?'ساعة':h===1.5?'ساعة ونصف':h===2?'ساعتان':n(h)+(Number.isInteger(h)&&h>=3&&h<=10?' ساعات':' ساعة');
+let S={subjects:[],hours:4,maxSubj:2,days:[0,1,2,3,4],notif:{on:false,time:'21:00',last:''},plan:null,backlog:[]};
+function load(){try{
+  let r=localStorage.getItem(KEY);
+  if(r){S=Object.assign(S,JSON.parse(r));return}
+  const old=localStorage.getItem('arStudyPlanner.v1'); // keep settings from the previous version
+  if(old){const o=JSON.parse(old);['hours','days','notif'].forEach(k=>{if(o[k]!==undefined)S[k]=o[k]})}
+}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const uid=()=>Math.random().toString(36).slice(2,9);
+const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+const subOf=id=>S.subjects.find(s=>s.id===id)||{name:'مادة محذوفة',color:'#ddd',diff:'md'};
+function toast(title,msg){const t=document.createElement('div');t.className='toast';t.innerHTML='<b></b><span></span>';t.firstChild.textContent=title;t.lastChild.textContent=msg;$('toasts').appendChild(t);setTimeout(()=>t.remove(),7000)}
+
+/* ---------- Subjects ---------- */
+function clampInt(v,min,max,def){v=parseInt(v,10);return isNaN(v)?def:Math.min(max,Math.max(min,v))}
+function previewSub(){
+  const c=clampInt($('sCount').value,1,15,1),st=clampInt($('sStart').value,1,99,1),h=DIFF[$('sDiff').value].h;
+  $('subPreview').textContent=`سيتم إنشاء سكشن ${n(st)} إلى سكشن ${n(st+c-1)}، بمعدل ${fmtH(h)} لكل سكشن (الإجمالي ${fmtH(c*h)}).`;
+}
+function renderSubjects(){
+  const box=$('tags');box.innerHTML='';
+  if(!S.subjects.length){box.innerHTML='<span class="empty">لم تضف أي مادة بعد. أدخل البيانات أعلاه ثم اضغط «إضافة مادة».</span>';return}
+  S.subjects.forEach(s=>{const e=document.createElement('span');e.className='tag';e.style.background=s.color;
+    e.innerHTML='<span></span><small></small><button type="button" aria-label="حذف المادة">×</button>';
+    e.children[0].textContent=s.name;
+    e.children[1].textContent=`سكشن ${n(s.start)}–${n(s.start+s.count-1)} · ${DIFF[s.diff].t} · ${fmtH(DIFF[s.diff].h)}/سكشن`;
+    e.children[2].onclick=()=>{S.subjects=S.subjects.filter(x=>x.id!==s.id);save();renderSubjects();updateWorkload()};box.appendChild(e)});
+}
+function addSubject(){
+  const name=$('sName').value.trim();
+  if(!name){toast('اسم المادة مطلوب','اكتب اسم المادة قبل إضافتها.');return}
+  if(S.subjects.some(s=>s.name===name)){toast('المادة موجودة','هذه المادة مضافة بالفعل.');return}
+  S.subjects.push({id:uid(),name,count:clampInt($('sCount').value,1,15,1),start:clampInt($('sStart').value,1,99,1),diff:$('sDiff').value,color:COLORS[S.subjects.length%COLORS.length]});
+  $('sName').value='';$('sStart').value=1;save();renderSubjects();updateWorkload();
+}
+function renderDays(){
+  const box=$('days');box.innerHTML='';
+  DAYS.forEach((nm,i)=>{const l=document.createElement('label');l.className='chip';
+    l.innerHTML='<input type="checkbox"><span></span>';const c=l.firstChild;c.checked=S.days.includes(i);l.lastChild.textContent=nm;
+    c.onchange=()=>{S.days=c.checked?[...S.days,i].sort():S.days.filter(x=>x!==i);save();updateWorkload()};box.appendChild(l)});
+}
+
+/* ---------- Workload ---------- */
+function updateWorkload(){
+  const el=$('workload');
+  const chs=S.subjects.reduce((a,s)=>a+s.count,0);
+  const need=S.subjects.reduce((a,s)=>a+s.count*DIFF[s.diff].h,0);
+  const avail=S.hours*S.days.length;
+  if(!S.subjects.length){el.className='pill';el.textContent='ملخص العبء الدراسي: أضف موادك لحساب العبء.';return}
+  const over=need>avail;
+  el.className='pill'+(over?' warn':'');
+  el.innerHTML=`ملخص العبء الدراسي: <b>${n(chs)}</b> سكشن تحتاج <b>${fmtH(need)}</b> مقابل <b>${fmtH(avail)}</b> متاحة هذا الأسبوع.`+
+    (over?` الخطة مزدحمة قليلاً بمقدار ${fmtH(need-avail)}؛ جرّب زيادة الساعات أو الأيام، أو تقليل عدد السكشنات.`:' الخطة مريحة وتتسع في وقتك.');
+}
+
+/* ---------- Scheduling ---------- */
+// queues: {sid:[tasks in chapter order]}, days: ordered day indexes, locked: {day:[kept tasks]}
+function distribute(queues,days,locked){
+  const plan={};days.forEach(d=>plan[d]=[...(locked[d]||[])]);
+  const H=S.hours,M=S.maxSubj;
+  days.forEach((d,k)=>{
+    const remDays=days.length-k;
+    let used=plan[d].reduce((a,t)=>a+t.dur,0);
+    const subs=new Set(plan[d].map(t=>t.sid));
+    const score=sid=>queues[sid].reduce((a,t)=>a+t.dur,0)/remDays+Math.random()*.3; // pace: hours still owed per remaining day
+    for(;;){
+      const open=Object.keys(queues).filter(s=>queues[s].length&&(subs.has(s)||subs.size<M));
+      let c=open.filter(s=>used+queues[s][0].dur<=H+1e-9);
+      if(!c.length){ if(plan[d].length||!open.length)break; c=open; } // empty day: place one chapter even if longer than the daily target
+      c=c.map(s=>({s,v:score(s)})).sort((a,b)=>b.v-a.v);
+      const t=queues[c[0].s].shift();plan[d].push(t);used+=t.dur;subs.add(t.sid);
+    }
+  });
+  return {plan,left:Object.values(queues).flat()};
+}
+function makeQueues(tasks){
+  const q={};tasks.forEach(t=>{(q[t.sid]=q[t.sid]||[]).push(t)});
+  Object.values(q).forEach(a=>a.sort((x,y)=>x.ch-y.ch));return q;
+}
+function generate(){
+  if(!S.subjects.length){toast('أضف مادة أولاً','أضف مادة واحدة على الأقل لإنشاء الخطة.');return}
+  if(!S.days.length){toast('اختر أيام المذاكرة','حدّد يوماً واحداً على الأقل.');return}
+  const tasks=[];
+  S.subjects.forEach(s=>{for(let i=0;i<s.count;i++)tasks.push({id:uid(),sid:s.id,ch:s.start+i,dur:DIFF[s.diff].h,done:false})});
+  const r=distribute(makeQueues(tasks),S.days,{});
+  S.plan=r.plan;S.backlog=r.left;save();renderWeek();
+  if(r.left.length)toast('الخطة مزدحمة',`لم تتسع ${n(r.left.length)} سكشن ضمن الساعات المحددة، وظهرت أسفل الجدول.`);
+}
+function reschedule(){
+  if(!S.plan){toast('لا توجد خطة','أنشئ الخطة الأسبوعية أولاً.');return}
+  const td=new Date().getDay(),future=S.days.filter(d=>d>td).sort((a,b)=>a-b);
+  if(!future.length){toast('لا أيام متبقية','لا توجد أيام دراسة بعد اليوم في هذا الأسبوع لترحيل المهام إليها.');return}
+  let pool=[...S.backlog],moved=0;const locked={};
+  for(let d=0;d<7;d++){
+    const list=S.plan[d];if(!list)continue;
+    const undone=list.filter(t=>!t.done);
+    if(d<=td){moved+=undone.length;pool.push(...undone);S.plan[d]=list.filter(t=>t.done)}
+    else{pool.push(...undone);locked[d]=list.filter(t=>t.done)}
+  }
+  if(!moved&&!S.backlog.length){toast('لا توجد مهام للترحيل','كل سكشنات الأيام الماضية واليوم منجزة. أحسنت!');return}
+  const r=distribute(makeQueues(pool),future,locked);
+  future.forEach(d=>S.plan[d]=r.plan[d]);
+  S.backlog=r.left;save();renderWeek();
+  toast('تم الترحيل',`أُعيد توزيع ${n(pool.length)} سكشن على ${n(future.length)} أيام متبقية${r.left.length?`، وتعذّر استيعاب ${n(r.left.length)} منها.`:'.'}`);
+}
+
+/* ---------- Rendering ---------- */
+function allTasks(){return [...Object.values(S.plan||{}).flat(),...S.backlog]}
+function renderWeek(){
+  const box=$('week');box.innerHTML='';
+  if(!S.plan){box.innerHTML='<p class="empty">لا توجد خطة بعد. أضف موادك ثم اضغط «إنشاء الخطة الأسبوعية».</p>';$('backlog').innerHTML='';updateProgress();return}
+  const td=new Date().getDay();
+  DAYS.forEach((nm,i)=>{
+    const sess=S.plan[i];const el=document.createElement('article');
+    el.className='day'+(i===td?' today':'')+(sess?'':' off');
+    const h=document.createElement('h3');const sp=document.createElement('span');sp.textContent=nm;h.appendChild(sp);
+    if(sess&&sess.length){const sm=document.createElement('small');sm.textContent=fmtH(sess.reduce((a,t)=>a+t.dur,0));h.appendChild(sm)}
+    if(i===td){const b=document.createElement('span');b.className='badge-today';b.textContent='اليوم';h.appendChild(b)}
+    el.appendChild(h);
+    if(!sess||!sess.length){const p=document.createElement('p');p.className='empty';p.textContent=sess?'لا توجد مهام':'يوم راحة';el.appendChild(p)}
+    else sess.forEach(x=>{
+      const sub=subOf(x.sid);
+      const r=document.createElement('label');r.className='sess'+(x.done?' done':'');r.style.background=sub.color;
+      r.innerHTML='<input type="checkbox"><div><div class="nm"></div><div class="ch"></div><div class="meta"><span class="d"></span><span class="pr"></span></div></div>';
+      const c=r.querySelector('input');c.checked=x.done;
+      r.querySelector('.nm').textContent=sub.name;
+      r.querySelector('.ch').textContent='سكشن '+n(x.ch);
+      r.querySelector('.d').textContent=fmtH(x.dur);
+      const pb=r.querySelector('.pr');pb.classList.add(sub.diff);pb.textContent=DIFF[sub.diff].t;
+      c.onchange=()=>{x.done=c.checked;r.classList.toggle('done',x.done);save();updateProgress()};
+      el.appendChild(r);
+    });
+    box.appendChild(el);
+  });
+  const bl=$('backlog');bl.innerHTML='';
+  if(S.backlog.length){
+    bl.className='backlog';bl.innerHTML='<h3></h3><ul></ul><p class="note">اضغط «ترحيل المهام غير المنجزة لباقي الأسبوع» أو زد ساعات اليوم ثم أعد التوزيع.</p>';
+    bl.querySelector('h3').textContent=`سكشنات لم تتسع في الجدول (${n(S.backlog.length)})`;
+    S.backlog.forEach(t=>{const li=document.createElement('li');li.textContent=`${subOf(t.sid).name} - سكشن ${n(t.ch)}`;bl.querySelector('ul').appendChild(li)});
+  }else bl.className='';
+  updateProgress();
+}
+function updateProgress(){
+  const a=allTasks();const done=a.filter(x=>x.done).length;const p=a.length?Math.round(done/a.length*100):0;
+  $('pFill').style.width=p+'%';$('pBar').setAttribute('aria-valuenow',p);
+  $('pTxt').textContent=a.length?`تم إنجاز ${n(done)} من ${n(a.length)} سكشن (${n(p)}٪)`:'لا توجد سكشنات بعد';
+}
+
+/* ---------- Notifications ---------- */
+function permNote(){
+  const el=$('permNote');
+  if(!('Notification' in window)){el.textContent='متصفحك لا يدعم إشعارات النظام؛ ستظهر التذكيرات داخل الصفحة فقط.';return}
+  el.textContent=Notification.permission==='granted'?'إشعارات المتصفح مسموحة.':Notification.permission==='denied'?'الإشعارات محظورة في إعدادات المتصفح؛ ستظهر التذكيرات داخل الصفحة فقط.':'سيطلب المتصفح إذنك عند التفعيل.';
+}
+function notify(title,body){
+  toast(title,body);
+  try{if('Notification' in window&&Notification.permission==='granted')new Notification(title,{body,lang:'ar',dir:'rtl',tag:'study-reminder'})}catch(e){}
+}
+async function onToggle(){
+  S.notif.on=$('notifOn').checked;
+  if(S.notif.on&&'Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch(e){}}
+  save();permNote();
+}
+function tick(){
+  if(!S.notif.on)return;
+  const now=new Date();const hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  if(hm<S.notif.time||S.notif.last===todayKey())return;
+  S.notif.last=todayKey();save();
+  const list=(S.plan&&S.plan[now.getDay()])||[];
+  const left=list.filter(x=>!x.done);
+  if(left.length){
+    const names=[...new Set(left.map(x=>subOf(x.sid).name))].join('، ');
+    notify('تذكير: سكشنات اليوم غير منجزة',`متبقٍ ${n(left.length)} سكشن غير منجز اليوم من أصل ${n(list.length)} (${names}). أكملها قبل نهاية اليوم!`);
+  }
+}
+
+/* ---------- Wire up ---------- */
+load();
+$('hours').value=S.hours;$('hoursOut').textContent=fmtH(S.hours);
+$('hours').oninput=e=>{S.hours=+e.target.value;$('hoursOut').textContent=fmtH(S.hours);save();updateWorkload()};
+$('maxSubj').value=S.maxSubj;
+$('maxSubj').onchange=e=>{S.maxSubj=+e.target.value;save()};
+['sCount','sStart','sDiff'].forEach(id=>$(id).addEventListener('input',previewSub));
+$('rTime').value=S.notif.time;$('notifOn').checked=S.notif.on;
+$('rTime').onchange=e=>{S.notif.time=e.target.value||'21:00';S.notif.last='';save()};
+$('notifOn').onchange=onToggle;
+$('testN').onclick=async()=>{
+  if('Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch(e){}permNote()}
+  notify('اختبار الإشعار','الإشعارات تعمل. سيصلك التذكير في الوقت المحدد.');
+};
+$('addSub').onclick=addSubject;
+$('sName').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addSubject()}};
+$('gen').onclick=generate;
+$('shuffle').onclick=()=>{generate();if(S.plan)toast('تمت إعادة التوزيع','أُنشئ توزيع جديد وأُعيد ضبط الإنجاز.')};
+$('resched').onclick=reschedule;
+$('print').onclick=()=>{try{window.print()}catch(e){toast('تعذرت الطباعة','استخدم قائمة المتصفح ثم «طباعة».')}};
+$('reset').onclick=()=>{if(confirm('هل تريد مسح الخطة الحالية؟')){S.plan=null;S.backlog=[];save();renderWeek()}};
+renderSubjects();renderDays();renderWeek();permNote();previewSub();updateWorkload();
+setInterval(tick,30000);tick();
+</script>
+</body>
+</html>
